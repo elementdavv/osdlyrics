@@ -529,16 +529,23 @@ msgid "If locked, you can't move OSD window by mouse"
 msgstr "锁定后将无法用鼠标移动桌面歌词"
 
 #: ../data/dialogs.glade.h:85
-msgid "_Lock Position"
-msgstr "锁定位置(_L)"
+
+# change
+# msgid "_Lock Position"
+# msgstr "锁定位置(_L)"
+msgid "_Lock OSD position"
+msgstr "锁定桌面歌词位置(_L)"
 
 #: ../data/dialogs.glade.h:86
 msgid "Hide the OSD Window"
 msgstr "隐藏桌面歌词窗口"
 
 #: ../data/dialogs.glade.h:87
-msgid "_Hide"
-msgstr "隐藏(_H)"
+# change
+# msgid "_Hide"
+# msgstr "隐藏(_H)"
+msgid "_Hide OSD"
+msgstr "隐藏桌面歌词(_H)"
 
 #: ../data/dialogs.glade.h:88
 msgid "_Search lyric..."

@@ -359,9 +359,35 @@ _change_lrc (void)
   _cancel_source_task ();
   if (current_lrc)
     g_object_unref (current_lrc);
-  current_lrc = ol_lyrics_get_current_lyrics (lyrics_proxy);
+
+  // change to get from my metadata
+  current_lrc = ol_lyrics_get_lyrics (lyrics_proxy, current_metadata);
+  // current_lrc = ol_lyrics_get_current_lyrics (lyrics_proxy);
+  // change end
+
   CALL_DISPLAY_MODULES (ol_display_module_set_lrc, current_lrc);
   _update_position ();
+
+  // change to check ignore path
+  const char *uri = ol_metadata_get_uri (current_metadata);
+  if (uri != NULL)
+  {
+    OlConfigProxy *config = ol_config_proxy_get_instance ();
+    char **list = ol_config_proxy_get_str_list (config,
+                                              "Download/ignore-path",
+                                              NULL);
+    for (char ** l = list; *l; l++)
+    {
+      if (g_strstr_len (uri, -1, *l) != NULL)
+      {
+        g_strfreev(list);
+        return;
+      }
+    }
+    g_strfreev(list);
+  }
+// change end
+
   if (current_lrc == NULL &&
       !ol_is_string_empty (ol_metadata_get_title (current_metadata)))
     ol_app_download_lyric (current_metadata);

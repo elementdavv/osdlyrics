@@ -1,14 +1,13 @@
 from __future__ import unicode_literals
+from osdlyrics.utils import get_proxy_settings, http_download
+from osdlyrics.lyricsource import BaseLyricSourcePlugin, SearchResult
+import json
+import http.client
+import gettext
+from builtins import map, str, super
 from future import standard_library
 standard_library.install_aliases()
-from builtins import map, str, super
 
-import gettext
-import http.client
-import json
-
-from osdlyrics.lyricsource import BaseLyricSourcePlugin, SearchResult
-from osdlyrics.utils import get_proxy_settings, http_download
 
 _ = gettext.gettext
 
@@ -55,7 +54,8 @@ class NeteaseSource(BaseLyricSourcePlugin):
                 artist_name = song['artists'][0]['name']
             else:
                 artist_name = ''
-            url = NETEASE_HOST + NETEASE_LYRIC_URL + '?id=' + str(song['id']) + '&lv=-1&kv=-1&tv=-1'
+            url = NETEASE_HOST + NETEASE_LYRIC_URL + '?id=' + \
+                str(song['id']) + '&lv=-1&kv=-1&tv=-1'
             return SearchResult(title=song['name'],
                                 artist=artist_name,
                                 album=song['album']['name'],

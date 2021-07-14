@@ -191,10 +191,13 @@ int ol_metadata_deserialize (OlMetadata *metadata,
  * @return A GVariant of a{sv}
  */
 GVariant *ol_metadata_to_variant (OlMetadata *metadata);
-#endif /* _OL_METADATA_H_ */
 
+// change
 // get real title
-const char *ol_metadata_get_search_title (const OlMetadata *metadata);
+char *ol_metadata_get_search_title (const OlMetadata *metadata);
 
 // get real artist
-const char *ol_metadata_get_search_artist (const OlMetadata *metadata);
+char *ol_metadata_get_search_artist (const OlMetadata *metadata);
+// change end
+
+#endif /* _OL_METADATA_H_ */

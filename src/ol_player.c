@@ -831,6 +831,17 @@ ol_player_get_metadata (OlPlayer *player, OlMetadata *metadata)
     return FALSE;
   if (metadata != NULL)
     ol_metadata_copy (metadata, private->metadata);
+
+  // change to real artist and title
+  if (metadata != NULL)
+  {
+    char *artist = ol_metadata_get_search_artist (metadata);
+    char *title = ol_metadata_get_search_title (metadata);
+    ol_metadata_set_artist (metadata, artist);
+    ol_metadata_set_title (metadata, title);
+  }
+  // change end
+
   return TRUE;
 }
 

@@ -502,15 +502,16 @@ ol_metadata_to_variant (OlMetadata *metadata)
   return ret;
 }
 
+// change
 /*
-  chech whether tag artist is valid
+  check whether tag artist is valid
  */
-static gboolean artist_valid(const OlMetadata *metadata)
+gboolean artist_valid(const OlMetadata *metadata)
 {
   ol_assert_ret (metadata != NULL, FALSE);
 
   // no artist name list
-  char * arts[] = {"unknown", "未知", "群星", NULL};
+  char * arts[] = {"unknown", "various", "未知", "群星", NULL};
 
   if (metadata->artist == NULL || strlen(metadata->artist) == 0)
   {
@@ -518,7 +519,7 @@ static gboolean artist_valid(const OlMetadata *metadata)
   }
 
   gboolean valid = TRUE;
-  char * artist = g_ascii_strdown(metadata->artist, -1);
+  char * artist = g_ascii_strdown (metadata->artist, -1);
   for (char ** a = arts; *a; a++)
   {
     if (g_strstr_len (artist, -1, *a) != NULL)
@@ -527,7 +528,7 @@ static gboolean artist_valid(const OlMetadata *metadata)
       break;
     }
   }
-  g_free(artist);
+  g_free (artist);
 
   return valid;
 }
@@ -535,25 +536,20 @@ static gboolean artist_valid(const OlMetadata *metadata)
 /*
   get real title:
   if tag artist is valid, assume tag title is correct and return it, else parse it and return real title
-  support tag title formats: 
+  support tag title formats:
     %n.%p-%t, %n.%t--%p, %n.%t, %p-%t, %t--%p, %t
-  intend to be called in search action
+  return NULL or a newly allocated string
  */
-const char *
-ol_metadata_get_search_title (const OlMetadata *metadata)
+char *ol_metadata_get_search_title (const OlMetadata *metadata)
 {
   ol_assert_ret (metadata != NULL, NULL);
 
   if (metadata->title == NULL)
   {
-    return metadata->title;
+    return NULL;
   }
 
-  gboolean valid_artist = artist_valid(metadata);
-
   char * title = NULL;
-  char * title1 = NULL;
-
   // get title without track number
   gchar **pathv = g_strsplit (metadata->title, ".", 0);
   gchar **p;
@@ -561,26 +557,33 @@ ol_metadata_get_search_title (const OlMetadata *metadata)
   {
     p = pathv;
     p++;
-    title = g_strstrip(g_strdup(*p));
+    title = g_strstrip (g_strdup (*p));
   }
   else
   {
-    title = g_strdup(metadata->title);
+    title = g_strstrip (g_strdup (metadata->title));
   }
-  g_free(pathv);
+  g_strfreev (pathv);
 
   // if tag artist is valid, assume the title is correct
-  if (valid_artist) {
-    return title;
+  if (artist_valid (metadata)) {
+    if (strlen (title) != 0)
+      return title;
+    else
+    {
+      g_free (title);
+      return g_strstrip (g_strdup (metadata->title));
+    }
   }
 
-  // parse title from tag title
+  char * title1 = NULL;
+  // get title from tag title
   gchar **pathv2 = g_strsplit (title, "--", 0);
   gchar **p2;
   if (g_strv_length (pathv2) == 2)
   {
     p2 = pathv2;
-    title1 = g_strstrip(g_strdup(*p2));
+    title1 = g_strstrip (g_strdup (*p2));
   }
   else
   {
@@ -590,48 +593,53 @@ ol_metadata_get_search_title (const OlMetadata *metadata)
     {
       p3 = pathv3;
       p3++;
-      title1 = g_strstrip(g_strdup(*p3));
+      title1 = g_strstrip (g_strdup (*p3));
     }
     else
     {
-      title1 = g_strdup(title);
+      title1 = g_strdup (title);
     }
-    g_free(pathv3);
+    g_strfreev (pathv3);
   }
-  g_free(pathv2);
-  g_free(title);
+  g_strfreev (pathv2);
 
-  return title1;
+
+  if (strlen (title1) != 0)
+  {
+    g_free (title);
+    return title1;
+  }
+  else if (strlen (title) != 0)
+  {
+    g_free (title1);
+    return title;
+  }
+  else
+  {
+    g_free (title1);
+    g_free (title);
+    return g_strstrip (g_strdup (metadata->title));
+  }
 }
 
 /*
   get real artist:
   if tag artist is valid, return it, else parse tag title and return real artist
-  support tag title formats: 
+  support tag title formats:
     %n.%p-%t, %n.%t--%p, %n.%t, %p-%t, %t--%p, %t
-  intend to be called in search action
+  return NULL or a newly allocated string
  */
-const char *
-ol_metadata_get_search_artist (const OlMetadata *metadata)
+char *ol_metadata_get_search_artist (const OlMetadata *metadata)
 {
   ol_assert_ret (metadata != NULL, NULL);
 
-  if (metadata->title == NULL)
-  {
-    return metadata->artist;
-  }
-
-  gboolean valid_artist = artist_valid(metadata);
-
   // if tag artist is valid, return
-  if (valid_artist)
+  if (metadata->title == NULL || artist_valid (metadata))
   {
-    return metadata->artist;
+    return g_strstrip (g_strdup (metadata->artist));
   }
 
   char * title = NULL;
-  char * artist = NULL;
-
   // get title without track number
   gchar **pathv = g_strsplit (metadata->title, ".", 0);
   gchar **p;
@@ -639,22 +647,23 @@ ol_metadata_get_search_artist (const OlMetadata *metadata)
   {
     p = pathv;
     p++;
-    title = g_strstrip(g_strdup(*p));
+    title = g_strstrip (g_strdup(*p));
   }
   else
   {
-    title = g_strdup(metadata->title);
+    title = g_strstrip (g_strdup (metadata->title));
   }
-  g_free(pathv);
-  
-  // get artist from title
+  g_strfreev (pathv);
+
+  char * artist = NULL;
+  // get artist from tag title
   gchar **pathv2 = g_strsplit (title, "--", 0);
   gchar **p2;
   if (g_strv_length (pathv2) == 2)
   {
     p2 = pathv2;
     p2++;
-    artist = g_strstrip(g_strdup(*p2));
+    artist = g_strstrip (g_strdup(*p2));
   }
   else
   {
@@ -663,16 +672,17 @@ ol_metadata_get_search_artist (const OlMetadata *metadata)
     if (g_strv_length (pathv3) == 2)
     {
       p3 = pathv3;
-      artist = g_strstrip(g_strdup(*p3));
+      artist = g_strstrip (g_strdup(*p3));
     }
     else
     {
-      artist = "";
+      artist = g_strdup ("");
     }
-    g_free(pathv3);
+    g_strfreev (pathv3);
   }
-  g_free(pathv2);
-  g_free(title);
+  g_strfreev (pathv2);
+  g_free (title);
 
   return artist;
 }
+// change end
