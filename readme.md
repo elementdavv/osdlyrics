@@ -1,4 +1,5 @@
-Merged with upstream of commit 3945527 on Jun 2, 2021 (release 0.5.9)
+* Merged with upstream of commit 987e99d on Nov 16, 2021 (release 0.5.10)
+* Merged with upstream of commit 3945527 on Jun 2, 2021 (release 0.5.9)
 
 ### change metadata to get real title and artist
 - if no tag, find title / artist from meta title
@@ -18,18 +19,18 @@ Merged with upstream of commit 3945527 on Jun 2, 2021 (release 0.5.9)
 - 修改：     src/ol_search_diglog.c
 
 ### install instruction:
-	sudo apt install python3-future
-	./autogen.sh
-	./configure --prefix=/usr PYTHON=/usr/bin/python3
-	make
-	sudo make install
-	sudo mv /usr/lib/python3.8/site-packages/osdlyrics /usr/lib/python3/dist-packages
+- sudo apt install python3-future
+- ./autogen.sh
+- ./configure --prefix=/usr PYTHON=/usr/bin/python3
+- make
+- sudo make install
+- sudo mv /usr/lib/python3.8/site-packages/osdlyrics /usr/lib/python3/dist-packages
 
 ### uninstall instruction:
-	sudo make uninstall
-	sudo rm -rf /usr/share/osdlyrics
-	sudo rm -rf /usr/lib/osdlyrics
-	sudo rm -rf /usr/lib/python3/dist-package/osdlyrics
+- sudo make uninstall
+- sudo rm -rf /usr/share/osdlyrics
+- sudo rm -rf /usr/lib/osdlyrics
+- sudo rm -rf /usr/lib/python3/dist-package/osdlyrics
 
 ### build required:(ubuntu20.04)
 - autoconf automake libtool
