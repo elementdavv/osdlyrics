@@ -6,9 +6,9 @@
 - support meta title formats: %n.%p-%t, %n.%t--%p, %n.%t, %p-%t, %t--%p, %t
 - default download changes to download best match first
 
-### changed src files:
-- 修改：     README.md
+### modified:
 - 增加：     readme.md
+- 修改：     README.md
 - 修改：     po/zh_CN.po
 - 修改：     src/ol_lyric_candidate_selector.c
 - 修改：     src/ol_lyric_source.c
@@ -19,7 +19,6 @@
 - 修改：     src/ol_search_diglog.c
 
 ### install instruction:
-- sudo apt install python3-future
 - ./autogen.sh
 - ./configure --prefix=/usr PYTHON=/usr/bin/python3
 - make
@@ -32,7 +31,7 @@
 - sudo rm -rf /usr/lib/osdlyrics
 - sudo rm -rf /usr/lib/python3/dist-package/osdlyrics
 
-### build required:(ubuntu20.04)
+### dependencies: (ubuntu20.04)
 - autoconf automake libtool
 - libglib2.0-dev
 - libgtk2.0-dev
@@ -40,3 +39,4 @@
 - libnotify-dev
 - intltool
 - libappindicator-dev
+- python3-future
