@@ -5,10 +5,10 @@
 - if no tag, find title / artist from meta title
 - support meta title formats: %n.%p-%t, %n.%t--%p, %n.%t, %p-%t, %t--%p, %t
 - default download changes to download best match first
+- download add ignore path by key 'Download/ignore-path' in osdlyrics.conf
 
 ### modified:
 - 增加：     readme.md
-- 修改：     README.md
 - 修改：     po/zh_CN.po
 - 修改：     src/ol_lyric_candidate_selector.c
 - 修改：     src/ol_lyric_source.c
@@ -23,7 +23,7 @@
 - ./configure --prefix=/usr PYTHON=/usr/bin/python3
 - make
 - sudo make install
-- sudo mv /usr/lib/python3.8/site-packages/osdlyrics /usr/lib/python3/dist-packages
+- sudo mv /usr/lib/python3.10/site-packages/osdlyrics /usr/lib/python3/dist-packages
 
 ### uninstall instruction:
 - sudo make uninstall
