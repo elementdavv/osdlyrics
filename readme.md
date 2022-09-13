@@ -1,5 +1,4 @@
-* Merged with upstream of commit 987e99d on Nov 16, 2021 (release 0.5.10)
-* Merged with upstream of commit 3945527 on Jun 2, 2021 (release 0.5.9)
+* Merged with upstream of commit 521f482 on Sep 2, 2022 (release 0.5.12)
 
 ### change metadata to get real title and artist
 - if no tag, find title / artist from meta title
@@ -16,7 +15,6 @@
 - 修改：     src/ol_metadata.c
 - 修改：     src/ol_metadata.h
 - 修改：     src/ol_player.c
-- 修改：     src/ol_search_diglog.c
 
 ### install instruction:
 - ./autogen.sh
